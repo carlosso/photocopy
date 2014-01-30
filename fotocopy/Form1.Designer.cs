@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonVyberZroje = new System.Windows.Forms.Button();
             this.textBoxZdroj = new System.Windows.Forms.TextBox();
-            this.textBoxCil1 = new System.Windows.Forms.TextBox();
-            this.textBoxCil2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.textBoxCilJpg = new System.Windows.Forms.TextBox();
+            this.textBoxCilRaw = new System.Windows.Forms.TextBox();
+            this.buttonVyberCileJpg = new System.Windows.Forms.Button();
+            this.buttonVyberCileRaw = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.buttonNacti = new System.Windows.Forms.Button();
@@ -61,19 +61,23 @@
             this.labelPriklad = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBoxCil3 = new System.Windows.Forms.TextBox();
+            this.buttonVyberCileVideo = new System.Windows.Forms.Button();
+            this.textBoxCilVideo = new System.Windows.Forms.TextBox();
+            this.checkBoxVynechtJpg = new System.Windows.Forms.CheckBox();
+            this.backgroundWorkerCopy = new System.ComponentModel.BackgroundWorker();
+            this.labelKopirovanySoubor = new System.Windows.Forms.Label();
+            this.backgroundWorkerDelete = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
-            // button1
+            // buttonVyberZroje
             // 
-            this.button1.Location = new System.Drawing.Point(310, 54);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(29, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonVyberZroje.Location = new System.Drawing.Point(310, 54);
+            this.buttonVyberZroje.Name = "buttonVyberZroje";
+            this.buttonVyberZroje.Size = new System.Drawing.Size(29, 23);
+            this.buttonVyberZroje.TabIndex = 0;
+            this.buttonVyberZroje.Text = "...";
+            this.buttonVyberZroje.UseVisualStyleBackColor = true;
+            this.buttonVyberZroje.Click += new System.EventHandler(this.buttonVyberZdroje_Click);
             // 
             // textBoxZdroj
             // 
@@ -86,45 +90,45 @@
             this.textBoxZdroj.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxZdroj_DragDrop);
             this.textBoxZdroj.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxZdroj_DragEnter);
             // 
-            // textBoxCil1
+            // textBoxCilJpg
             // 
-            this.textBoxCil1.AllowDrop = true;
-            this.textBoxCil1.Location = new System.Drawing.Point(12, 229);
-            this.textBoxCil1.Name = "textBoxCil1";
-            this.textBoxCil1.Size = new System.Drawing.Size(292, 20);
-            this.textBoxCil1.TabIndex = 3;
-            this.textBoxCil1.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxCil1_DragDrop);
-            this.textBoxCil1.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxCil1_DragEnter);
+            this.textBoxCilJpg.AllowDrop = true;
+            this.textBoxCilJpg.Location = new System.Drawing.Point(12, 229);
+            this.textBoxCilJpg.Name = "textBoxCilJpg";
+            this.textBoxCilJpg.Size = new System.Drawing.Size(292, 20);
+            this.textBoxCilJpg.TabIndex = 3;
+            this.textBoxCilJpg.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxCil1_DragDrop);
+            this.textBoxCilJpg.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxCil1_DragEnter);
             // 
-            // textBoxCil2
+            // textBoxCilRaw
             // 
-            this.textBoxCil2.AllowDrop = true;
-            this.textBoxCil2.Location = new System.Drawing.Point(12, 310);
-            this.textBoxCil2.Name = "textBoxCil2";
-            this.textBoxCil2.Size = new System.Drawing.Size(292, 20);
-            this.textBoxCil2.TabIndex = 4;
-            this.textBoxCil2.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxCil2_DragDrop);
-            this.textBoxCil2.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxCil2_DragEnter);
+            this.textBoxCilRaw.AllowDrop = true;
+            this.textBoxCilRaw.Location = new System.Drawing.Point(12, 310);
+            this.textBoxCilRaw.Name = "textBoxCilRaw";
+            this.textBoxCilRaw.Size = new System.Drawing.Size(292, 20);
+            this.textBoxCilRaw.TabIndex = 4;
+            this.textBoxCilRaw.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxCil2_DragDrop);
+            this.textBoxCilRaw.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxCil2_DragEnter);
             // 
-            // button2
+            // buttonVyberCileJpg
             // 
-            this.button2.Location = new System.Drawing.Point(310, 227);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(29, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "...";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonVyberCileJpg.Location = new System.Drawing.Point(310, 227);
+            this.buttonVyberCileJpg.Name = "buttonVyberCileJpg";
+            this.buttonVyberCileJpg.Size = new System.Drawing.Size(29, 23);
+            this.buttonVyberCileJpg.TabIndex = 5;
+            this.buttonVyberCileJpg.Text = "...";
+            this.buttonVyberCileJpg.UseVisualStyleBackColor = true;
+            this.buttonVyberCileJpg.Click += new System.EventHandler(this.buttonVyberCileJpg_Click);
             // 
-            // button3
+            // buttonVyberCileRaw
             // 
-            this.button3.Location = new System.Drawing.Point(310, 307);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(29, 23);
-            this.button3.TabIndex = 6;
-            this.button3.Text = "...";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.buttonVyberCileRaw.Location = new System.Drawing.Point(310, 307);
+            this.buttonVyberCileRaw.Name = "buttonVyberCileRaw";
+            this.buttonVyberCileRaw.Size = new System.Drawing.Size(29, 23);
+            this.buttonVyberCileRaw.TabIndex = 6;
+            this.buttonVyberCileRaw.Text = "...";
+            this.buttonVyberCileRaw.UseVisualStyleBackColor = true;
+            this.buttonVyberCileRaw.Click += new System.EventHandler(this.buttonVyberCileRaw_Click);
             // 
             // listView1
             // 
@@ -352,32 +356,62 @@
             this.label14.TabIndex = 35;
             this.label14.Text = "*.avi *.mov *.mp4 kopírovat sem";
             // 
-            // button4
+            // buttonVyberCileVideo
             // 
-            this.button4.Location = new System.Drawing.Point(310, 269);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(29, 23);
-            this.button4.TabIndex = 34;
-            this.button4.Text = "...";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.buttonVyberCileVideo.Location = new System.Drawing.Point(310, 269);
+            this.buttonVyberCileVideo.Name = "buttonVyberCileVideo";
+            this.buttonVyberCileVideo.Size = new System.Drawing.Size(29, 23);
+            this.buttonVyberCileVideo.TabIndex = 34;
+            this.buttonVyberCileVideo.Text = "...";
+            this.buttonVyberCileVideo.UseVisualStyleBackColor = true;
+            this.buttonVyberCileVideo.Click += new System.EventHandler(this.buttonVyberCileVideo_Click);
             // 
-            // textBoxCil3
+            // textBoxCilVideo
             // 
-            this.textBoxCil3.AllowDrop = true;
-            this.textBoxCil3.Location = new System.Drawing.Point(12, 271);
-            this.textBoxCil3.Name = "textBoxCil3";
-            this.textBoxCil3.Size = new System.Drawing.Size(292, 20);
-            this.textBoxCil3.TabIndex = 33;
+            this.textBoxCilVideo.AllowDrop = true;
+            this.textBoxCilVideo.Location = new System.Drawing.Point(12, 271);
+            this.textBoxCilVideo.Name = "textBoxCilVideo";
+            this.textBoxCilVideo.Size = new System.Drawing.Size(292, 20);
+            this.textBoxCilVideo.TabIndex = 33;
+            // 
+            // checkBoxVynechtJpg
+            // 
+            this.checkBoxVynechtJpg.AutoSize = true;
+            this.checkBoxVynechtJpg.Checked = true;
+            this.checkBoxVynechtJpg.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxVynechtJpg.Location = new System.Drawing.Point(12, 350);
+            this.checkBoxVynechtJpg.Name = "checkBoxVynechtJpg";
+            this.checkBoxVynechtJpg.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxVynechtJpg.TabIndex = 36;
+            this.checkBoxVynechtJpg.Text = "Vynechat jpg k mov";
+            this.checkBoxVynechtJpg.UseVisualStyleBackColor = true;
+            // 
+            // backgroundWorkerCopy
+            // 
+            this.backgroundWorkerCopy.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCopy_DoWork);
+            // 
+            // labelKopirovanySoubor
+            // 
+            this.labelKopirovanySoubor.AutoSize = true;
+            this.labelKopirovanySoubor.Location = new System.Drawing.Point(54, 443);
+            this.labelKopirovanySoubor.Name = "labelKopirovanySoubor";
+            this.labelKopirovanySoubor.Size = new System.Drawing.Size(0, 13);
+            this.labelKopirovanySoubor.TabIndex = 37;
+            // 
+            // backgroundWorkerDelete
+            // 
+            this.backgroundWorkerDelete.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerDelete_DoWork);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(701, 501);
+            this.Controls.Add(this.labelKopirovanySoubor);
+            this.Controls.Add(this.checkBoxVynechtJpg);
             this.Controls.Add(this.label14);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.textBoxCil3);
+            this.Controls.Add(this.buttonVyberCileVideo);
+            this.Controls.Add(this.textBoxCilVideo);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.labelPriklad);
             this.Controls.Add(this.label13);
@@ -401,15 +435,16 @@
             this.Controls.Add(this.buttonCopy);
             this.Controls.Add(this.buttonNacti);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBoxCil2);
-            this.Controls.Add(this.textBoxCil1);
+            this.Controls.Add(this.buttonVyberCileRaw);
+            this.Controls.Add(this.buttonVyberCileJpg);
+            this.Controls.Add(this.textBoxCilRaw);
+            this.Controls.Add(this.textBoxCilJpg);
             this.Controls.Add(this.textBoxZdroj);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonVyberZroje);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Fotocopy";
+            this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -419,12 +454,12 @@
         #endregion
 
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonVyberZroje;
         private System.Windows.Forms.TextBox textBoxZdroj;
-        private System.Windows.Forms.TextBox textBoxCil1;
-        private System.Windows.Forms.TextBox textBoxCil2;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBoxCilJpg;
+        private System.Windows.Forms.TextBox textBoxCilRaw;
+        private System.Windows.Forms.Button buttonVyberCileJpg;
+        private System.Windows.Forms.Button buttonVyberCileRaw;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Button buttonNacti;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -450,8 +485,12 @@
         private System.Windows.Forms.Label labelPriklad;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.TextBox textBoxCil3;
+        private System.Windows.Forms.Button buttonVyberCileVideo;
+        private System.Windows.Forms.TextBox textBoxCilVideo;
+        private System.Windows.Forms.CheckBox checkBoxVynechtJpg;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerCopy;
+        private System.Windows.Forms.Label labelKopirovanySoubor;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerDelete;
     }
 }
 
