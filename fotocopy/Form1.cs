@@ -214,7 +214,7 @@ namespace fotocopy
                         MessageBox.Show("Nebyly nalezeny žádné soubory ke zkopírování.");
                     }
                 }
-                catch (Exception vyjimka)
+                catch (Exception)
                 {
                     MessageBox.Show("Chyba při kopírování.");
                 }
@@ -510,6 +510,22 @@ namespace fotocopy
         private void backgroundWorkerDelete_DoWork(object sender, DoWorkEventArgs e)
         {
             NadSmaz();
+
+        }
+
+        private void textBoxCilVideo_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
+                textBoxCilVideo.Text = a.GetValue(0).ToString();
+            }
+
+        }
+
+        private void textBoxCilVideo_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
 
         }
 

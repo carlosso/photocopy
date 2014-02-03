@@ -153,7 +153,7 @@
             this.buttonNacti.Name = "buttonNacti";
             this.buttonNacti.Size = new System.Drawing.Size(75, 23);
             this.buttonNacti.TabIndex = 8;
-            this.buttonNacti.Text = "Načti odkud";
+            this.buttonNacti.Text = "Načti zdroj";
             this.buttonNacti.UseVisualStyleBackColor = true;
             this.buttonNacti.Click += new System.EventHandler(this.buttonNacti_Click);
             // 
@@ -163,7 +163,7 @@
             this.buttonCopy.Name = "buttonCopy";
             this.buttonCopy.Size = new System.Drawing.Size(124, 23);
             this.buttonCopy.TabIndex = 9;
-            this.buttonCopy.Text = "Zkopíruj odkud kam";
+            this.buttonCopy.Text = "Zkopíruj";
             this.buttonCopy.UseVisualStyleBackColor = true;
             this.buttonCopy.Click += new System.EventHandler(this.buttonCopy_Click);
             // 
@@ -173,7 +173,7 @@
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(81, 23);
             this.buttonDelete.TabIndex = 10;
-            this.buttonDelete.Text = "Smaž odkud";
+            this.buttonDelete.Text = "Smaž zdroj";
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
@@ -182,18 +182,18 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 41);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(279, 13);
+            this.label1.Size = new System.Drawing.Size(242, 13);
             this.label1.TabIndex = 11;
-            this.label1.Text = "*.jpg *.avi *.mov *.cr2 *.mp4 kopírovat odsud (např. karta)";
+            this.label1.Text = "*.jpg *.avi *.mov *.cr2 *.mp4 kopírovat z adresářě:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 210);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(99, 13);
+            this.label2.Size = new System.Drawing.Size(95, 13);
             this.label2.TabIndex = 12;
-            this.label2.Text = "*.jpg kopírovat sem";
+            this.label2.Text = "*.jpg kopírovat do:";
             // 
             // textBoxMeziadresar
             // 
@@ -207,9 +207,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 294);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(100, 13);
+            this.label3.Size = new System.Drawing.Size(96, 13);
             this.label3.TabIndex = 14;
-            this.label3.Text = "*.cr2 kopírovat sem";
+            this.label3.Text = "*.cr2 kopírovat do:";
             // 
             // label4
             // 
@@ -261,9 +261,9 @@
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label11.Location = new System.Drawing.Point(15, 13);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(63, 17);
+            this.label11.Size = new System.Drawing.Size(60, 17);
             this.label11.TabIndex = 23;
-            this.label11.Text = "ODKUD";
+            this.label11.Text = "ZDROJ";
             // 
             // label12
             // 
@@ -272,9 +272,9 @@
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label12.Location = new System.Drawing.Point(15, 183);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(40, 17);
+            this.label12.Size = new System.Drawing.Size(31, 17);
             this.label12.TabIndex = 24;
-            this.label12.Text = "KAM";
+            this.label12.Text = "CÍL";
             // 
             // labelExt
             // 
@@ -352,9 +352,9 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(12, 252);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(159, 13);
+            this.label14.Size = new System.Drawing.Size(155, 13);
             this.label14.TabIndex = 35;
-            this.label14.Text = "*.avi *.mov *.mp4 kopírovat sem";
+            this.label14.Text = "*.avi *.mov *.mp4 kopírovat do:";
             // 
             // buttonVyberCileVideo
             // 
@@ -373,6 +373,8 @@
             this.textBoxCilVideo.Name = "textBoxCilVideo";
             this.textBoxCilVideo.Size = new System.Drawing.Size(292, 20);
             this.textBoxCilVideo.TabIndex = 33;
+            this.textBoxCilVideo.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxCilVideo_DragDrop);
+            this.textBoxCilVideo.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxCilVideo_DragEnter);
             // 
             // checkBoxVynechtJpg
             // 
@@ -381,9 +383,9 @@
             this.checkBoxVynechtJpg.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxVynechtJpg.Location = new System.Drawing.Point(12, 350);
             this.checkBoxVynechtJpg.Name = "checkBoxVynechtJpg";
-            this.checkBoxVynechtJpg.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxVynechtJpg.Size = new System.Drawing.Size(227, 17);
             this.checkBoxVynechtJpg.TabIndex = 36;
-            this.checkBoxVynechtJpg.Text = "Vynechat jpg k mov";
+            this.checkBoxVynechtJpg.Text = "Nekopírovat jpg k mov (thumbnail k videu)";
             this.checkBoxVynechtJpg.UseVisualStyleBackColor = true;
             // 
             // backgroundWorkerCopy
