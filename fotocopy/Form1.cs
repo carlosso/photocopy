@@ -15,7 +15,7 @@ namespace fotocopy
     public partial class Form1 : Form
     {
         static String stringRegistry = "Software\\carlosso\\photocopy";
-        static String[] typy = { "jpg", "cr2", "avi", "mov", "mp4" };
+        static String[] typy = { "jpg", "cr2", "avi", "mov", "mp4","arw","mts" };
         static Int32 konstSirkaSloupce = 40;
         public Form1(String vychoziAdresar)
         {
@@ -82,7 +82,7 @@ namespace fotocopy
 
         private void buttonVyberCileRaw_Click(object sender, EventArgs e)
         {
-            /*----vyber ciloveho adresare pro *.cr2--*/
+            /*----vyber ciloveho adresare pro *.cr2 a *.arw--*/
             if (textBoxCilRaw.Text != "")
             {
                 folderBrowserDialog1.SelectedPath = textBoxCilRaw.Text;
@@ -96,7 +96,7 @@ namespace fotocopy
 
         private void buttonVyberCileVideo_Click(object sender, EventArgs e)
         {
-            /*----vyber ciloveho adresare pro *.avi mov mp4--*/
+            /*----vyber ciloveho adresare pro *.avi mov mp4 mts --*/
             if (textBoxCilVideo.Text != "")
             {
                 folderBrowserDialog1.SelectedPath = textBoxCilRaw.Text;
@@ -259,6 +259,7 @@ namespace fotocopy
                 }
                 String cilovyAdresar;
                 switch (ext) {
+                    case "arw":
                     case "cr2":
                         cilovyAdresar = textBoxCilRaw.Text + @"\" + mezi + datumString;
                         break;

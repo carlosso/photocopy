@@ -37,7 +37,7 @@
             this.buttonVyberCileJpg = new System.Windows.Forms.Button();
             this.buttonVyberCileRaw = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonNacti = new System.Windows.Forms.Button();
             this.buttonCopy = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
@@ -184,7 +184,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(242, 13);
             this.label1.TabIndex = 11;
-            this.label1.Text = "*.jpg *.avi *.mov *.cr2 *.mp4 kopírovat z adresářě:";
+            this.label1.Text = "*.jpg *.avi *.mov *.cr2 *.mp4 *.mts kopírovat z adresářě:";
             // 
             // label2
             // 
@@ -207,9 +207,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 294);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.Size = new System.Drawing.Size(150, 13);
             this.label3.TabIndex = 14;
-            this.label3.Text = "*.cr2 kopírovat do:";
+            this.label3.Text = "*.cr2 nebo *.arw kopírovat do:";
             // 
             // label4
             // 
@@ -354,7 +354,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(155, 13);
             this.label14.TabIndex = 35;
-            this.label14.Text = "*.avi *.mov *.mp4 kopírovat do:";
+            this.label14.Text = "*.avi *.mov *.mp4 *.mts kopírovat do:";
             // 
             // buttonVyberCileVideo
             // 
