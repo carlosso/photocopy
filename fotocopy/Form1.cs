@@ -22,21 +22,14 @@ namespace fotocopy
             InitializeComponent();
             /*----nacteni hodnot z registry---*/
             labelExt.Text = "";
-            try
-            {
-                RegistryKey klic = Registry.CurrentUser.OpenSubKey(stringRegistry);
-                /*---nejdriv musi byt maska, podle ni se nacitaji souboru--*/
-                textBoxMaska.Text = klic.GetValue("MASKA").ToString();
-                textBoxZdroj.Text = klic.GetValue("ZDROJ").ToString();
-                textBoxCilJpg.Text = klic.GetValue("CIL1").ToString();
-                textBoxCilRaw.Text = klic.GetValue("CIL2").ToString();
-                textBoxCilVideo.Text = klic.GetValue("CIL3").ToString();
-                klic.Close();
-            }
-            catch (Exception)
-            {
+            /*---nejdriv musi byt maska, podle ni se nacitaji souboru--*/
+            textBoxMaska.Text = nactiHodnotuZRegistry("MASKA");
+            textBoxZdroj1.Text = nactiHodnotuZRegistry("ZDROJ1");
+            textBoxZdroj2.Text = nactiHodnotuZRegistry("ZDROJ2");
+            textBoxCilJpg.Text = nactiHodnotuZRegistry("CIL1");
+            textBoxCilRaw.Text = nactiHodnotuZRegistry("CIL2");
+            textBoxCilVideo.Text = nactiHodnotuZRegistry("CIL3");
 
-            }
             if (textBoxMaska.Text == "")
             {
                 textBoxMaska.Text = "yyyy_MM_dd";
@@ -44,25 +37,53 @@ namespace fotocopy
 
             foreach (String typ in typy)
             {
-                ColumnHeader sloupec = listView1.Columns.Add(typ);
+                ColumnHeader sloupec = listViewSouboryZdrojove.Columns.Add(typ);
                 sloupec.Width = konstSirkaSloupce;
             }
         }
 
-
-        private void buttonVyberZdroje_Click(object sender, EventArgs e)
+        private String nactiHodnotuZRegistry(String nazevHodnoty)
         {
-            /*----vyber zdrojoveho adresare--*/
-            if (textBoxZdroj.Text != "")
+            String hodnota;
+            try
             {
-                folderBrowserDialog1.SelectedPath = textBoxZdroj.Text;
+                RegistryKey klic = Registry.CurrentUser.OpenSubKey(stringRegistry);
+                hodnota = klic.GetValue(nazevHodnoty).ToString();
+                klic.Close();
+            }
+            catch (Exception)
+            {
+                hodnota = "";
+            }
+            return hodnota;
+        }
+
+
+        private void buttonVyberZdroje1_Click(object sender, EventArgs e)
+        {
+            /*----vyber zdrojoveho adresare1--*/
+            if (textBoxZdroj1.Text != "")
+            {
+                folderBrowserDialog1.SelectedPath = textBoxZdroj1.Text;
             }
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                textBoxZdroj.Text = folderBrowserDialog1.SelectedPath;
+                textBoxZdroj1.Text = folderBrowserDialog1.SelectedPath;
             }
-
+        }
+        private void buttonVyberZdroje2_Click(object sender, EventArgs e)
+        {
+            /*----vyber zdrojoveho adresare1--*/
+            if (textBoxZdroj2.Text != "")
+            {
+                folderBrowserDialog1.SelectedPath = textBoxZdroj1.Text;
+            }
+            DialogResult result = folderBrowserDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                textBoxZdroj2.Text = folderBrowserDialog1.SelectedPath;
+            }
         }
 
         private void buttonVyberCileJpg_Click(object sender, EventArgs e)
@@ -112,18 +133,16 @@ namespace fotocopy
         private void buttonNacti_Click(object sender, EventArgs e)
         {
             /*---nacte pocty do listview---*/
-            listView1.Items.Clear();
-            if (!NactiVsechnySoubory())
-            {
-                MessageBox.Show("Adresář, odkud se má kopírovat, neexistuje!");
-            }
+            listViewSouboryZdrojove.Items.Clear();
+            NactiVsechnySouboryZeZdroju();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             /*----ulozeni hodnot do registry---*/
             RegistryKey klic = Registry.CurrentUser.CreateSubKey(stringRegistry);
-            klic.SetValue("ZDROJ", textBoxZdroj.Text);
+            klic.SetValue("ZDROJ1", textBoxZdroj1.Text);
+            klic.SetValue("ZDROJ2", textBoxZdroj2.Text);
             klic.SetValue("CIL1", textBoxCilJpg.Text);
             klic.SetValue("CIL2", textBoxCilRaw.Text);
             klic.SetValue("CIL3", textBoxCilVideo.Text);
@@ -137,38 +156,28 @@ namespace fotocopy
             String datumZobraz = datum.ToString(textBoxMaska.Text);
             return datumZobraz;
         }
-        private Boolean NactiVsechnySoubory()
+        private void NactiVsechnySouboryZeZdroju()
         {
-            /*----nacte vsechny druhy souboru ze zdrojoveho adresare, vrati true pokud adresar existuje, false pokud neexistuje---*/
-            if (Directory.Exists(textBoxZdroj.Text))
+            /*----nacte vsechny druhy souboru ze zdrojoveho adresare---*/
+            foreach (String ext in typy)
             {
-                foreach (String ext in typy)
-                {
-                    NactiZdroj(ext);
-                }
-                return true;
+                NactiSouboruZeZdrojuJedneExtenze(ext);
             }
-            else
-            {
-                return false;
-            }
-
         }
-        private void NactiZdroj(String ext)
+        private void NactiSouboruZeZdrojuJedneExtenze(String ext)
         {
             Int16 pocet;
-            /*----nacte soubory ze zdrojoveho adresare, naplni listview--*/
-            String[] soubory = Directory.GetFiles(textBoxZdroj.Text, "*." + ext, SearchOption.AllDirectories);
+            List<string> soubory = VratSouboryVeZdrojovychAdresarichJedneExtenze(ext);
 
             foreach (String soubor in soubory)
             {
                 /*---zjitim pozici extenze v poli, podle toho urcim sloupec v listView---*/
                 Int32 sloupec = Array.IndexOf<String>(typy, ext);
                 String datumZobraz = DejDatumSouboru(soubor);
-                ListViewItem polozka = listView1.FindItemWithText(datumZobraz);
+                ListViewItem polozka = listViewSouboryZdrojove.FindItemWithText(datumZobraz);
                 if (polozka == null)
                 {
-                    polozka = listView1.Items.Add(datumZobraz);
+                    polozka = listViewSouboryZdrojove.Items.Add(datumZobraz);
                     foreach (String typ in typy)
                     {
                         polozka.SubItems.Add("");
@@ -186,63 +195,88 @@ namespace fotocopy
                 polozka.SubItems[sloupec + 1].Text = pocet.ToString();
             }
         }
+
+        private int VratPocetSouboruVeZdrojovychAdresarich()
+        {
+            int pocetSouboru = 0;
+            foreach (String ext in typy)
+            {
+                List<String> soubory = VratSouboryVeZdrojovychAdresarichJedneExtenze(ext);
+                pocetSouboru += soubory.Count;
+            }
+            return pocetSouboru;
+        }
+
+        private List<string> VratSouboryVeZdrojovychAdresarichJedneExtenze(string ext)
+        {
+            String zdrojovyAdresar="";
+            List<String> soubory = new List<String>();
+            /*----nacte soubory ze zdrojoveho adresare-------*/
+            for (int i = 1; i <= 2; i++) //---dva zdrojove adresare
+            {
+                try
+                {
+                    String jmenoTextBoxu = "textBoxZdroj" + i;
+                    TextBox textBoxZdroj = (TextBox)this.Controls.Find(jmenoTextBoxu, true)[0];
+                    if (textBoxZdroj.Text.Trim() != "")
+                    {
+                        zdrojovyAdresar = textBoxZdroj.Text;
+                        if (Directory.Exists(zdrojovyAdresar))
+                        {
+                            String[] soubory1 = Directory.GetFiles(zdrojovyAdresar, "*." + ext, SearchOption.AllDirectories);
+                            soubory.AddRange(soubory1);
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("CHYBA: Chyba při hledání ve zdrojovém adresáři: " + zdrojovyAdresar);
+                }
+            }
+            soubory=soubory.Distinct().ToList();
+            return soubory;
+        }
+
         private void NadKopiruj()
         {
             /*-----spusteni kopirovani----*/
-            if (textBoxCilJpg.Text == "" && textBoxCilRaw.Text == "")
+            if (textBoxCilJpg.Text == "" && textBoxCilRaw.Text == "" && textBoxCilVideo.Text=="")
             {
                 MessageBox.Show("CHYBA: Není zadán ani jeden z cílových adresářů.");
                 return;
             }
-            if (Directory.Exists(textBoxZdroj.Text))
+            Int32 pocetZkopirovanych;
+            try
             {
-                Int32 pocetZkopirovanych;
-                try
+                pocetZkopirovanych = 0;
+                foreach (String ext in typy)
                 {
-                    pocetZkopirovanych = 0;
-                    foreach (String ext in typy)
-                    {
-                        pocetZkopirovanych += Kopiruj(ext);
-                    }
-
-                    if (pocetZkopirovanych > 0)
-                    {
-                        MessageBox.Show("Vše OK. Soubory zkopírovány. Počet: " + pocetZkopirovanych.ToString() + ".");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Nebyly nalezeny žádné soubory ke zkopírování.");
-                    }
+                    pocetZkopirovanych += Kopiruj(ext);
                 }
-                catch (Exception)
+
+                if (pocetZkopirovanych > 0)
                 {
-                    MessageBox.Show("Chyba při kopírování.");
+                    MessageBox.Show("Vše OK. Soubory zkopírovány. Počet: " + pocetZkopirovanych.ToString() + ".");
+                }
+                else
+                {
+                    MessageBox.Show("Nebyly nalezeny žádné soubory ke zkopírování.");
                 }
             }
-            else
+            catch (Exception)
             {
-                MessageBox.Show("Zdrojový adresář neexistuje!");
+                MessageBox.Show("Chyba při kopírování.");
             }
         }
         private Int32 Kopiruj(String ext)
         {
             /*------zkopiruje soubory dane extenze do cilovych adresaru---*/
             Int32 pocetCelkem =0 ;
-            String[] souboryMov;
             Int32 pocitadlo = 0;
             labelExt.Text = "*." + ext;
             labelExt.Refresh();
 
-            String[] soubory = Directory.GetFiles(textBoxZdroj.Text, "*." + ext, SearchOption.AllDirectories);
-            if (ext == "jpg")
-            {
-                /*---nactu movy----*/
-                souboryMov = Directory.GetFiles(textBoxZdroj.Text, "*.mov", SearchOption.AllDirectories);
-            }
-            else
-            {
-                souboryMov = null;
-            }
+            List<string> soubory = VratSouboryVeZdrojovychAdresarichJedneExtenze(ext);
             foreach (String soubor in soubory)
             {
                 pocetCelkem = soubory.Count();
@@ -265,18 +299,6 @@ namespace fotocopy
                         break;
                     case "jpg":
                         cilovyAdresar = textBoxCilJpg.Text + @"\" + mezi + datumString;
-                        /*--u jpegu se podivam, jestli neexistuje video se stejnym jmenem
-                         pokud ano, tak ho nekopiruji
-                         */
-                        if (checkBoxVynechtJpg.Checked)
-                        {
-                            String souborVidea = zdrojovySoubor.Substring(0, zdrojovySoubor.Length - 3) + "MOV";
-                            if (Array.IndexOf(souboryMov, souborVidea) >= 0)
-                            {
-                                /*---soubor existuje, jpg, nekopiruji----*/
-                                continue;
-                            }
-                        }
                         break;
                     default:
                         cilovyAdresar = textBoxCilVideo.Text + @"\" + mezi + datumString;
@@ -326,7 +348,7 @@ namespace fotocopy
             Int32 pocetUspesneCelkem = 0;
             Int32 pocetNeuspesne;
             Int32 pocetUspesne;
-            Int32 pocetKeSmazaniCelkem = DejPocetKeSmazani();
+            Int32 pocetKeSmazaniCelkem = VratPocetSouboruVeZdrojovychAdresarich();
             if (pocetKeSmazaniCelkem < 0)
             {
                 MessageBox.Show("Chyba při hledání souborů, co se mají smazat!");
@@ -337,7 +359,7 @@ namespace fotocopy
                 MessageBox.Show("Nebyl nalezen žádný soubor, co by se měl smazat.");
                 return;
             }
-            DialogResult res = MessageBox.Show("Opravdu smazat data? Počet souborů: " + pocetKeSmazaniCelkem.ToString() + ".", "Dotaz", MessageBoxButtons.YesNo);
+            DialogResult res = MessageBox.Show("Opravdu smazat? Počet souborů: " + pocetKeSmazaniCelkem.ToString() + ".", "Dotaz", MessageBoxButtons.YesNo);
             if (res == DialogResult.Yes)
             {
                 Int32 pocitadlo = 0;
@@ -365,7 +387,7 @@ namespace fotocopy
                     {
                         MessageBox.Show("CHYBA. Počet neúspěšně smazaných: " + pocetNeuspesne.ToString() + ".");
                     }
-                    NactiVsechnySoubory();
+                    NactiVsechnySouboryZeZdroju();
                 }
             }
         }
@@ -376,7 +398,7 @@ namespace fotocopy
             /*-----spusteni smazani zdrojovych souboru---*/
             try
             {
-                soubory = Directory.GetFiles(textBoxZdroj.Text, "*." + ext, SearchOption.AllDirectories);
+                soubory = Directory.GetFiles(textBoxZdroj1.Text, "*." + ext, SearchOption.AllDirectories);
             }
             catch (DirectoryNotFoundException)
             {
@@ -398,25 +420,6 @@ namespace fotocopy
             }
             return;
         }
-        private Int32 DejPocetKeSmazani()
-        {
-            Int32 celkem = 0;
-            foreach (String ext in typy)
-            {
-                String[] soubory;
-                try
-                {
-                    soubory = Directory.GetFiles(textBoxZdroj.Text, "*." + ext, SearchOption.AllDirectories);
-                    celkem += soubory.Length;
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    celkem = -1;
-                    break;
-                }
-            }
-            return celkem;
-        }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
@@ -428,12 +431,22 @@ namespace fotocopy
 
         private void textBoxZdroj_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxZdroj.Text != "")
+            if (textBoxZdroj1.Text != "")
             {
-                listView1.Items.Clear();
-                NactiVsechnySoubory();
+                listViewSouboryZdrojove.Items.Clear();
+                NactiVsechnySouboryZeZdroju();
             }
         }
+
+        private void textBoxZdroj2_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxZdroj2.Text != "")
+            {
+                listViewSouboryZdrojove.Items.Clear();
+                NactiVsechnySouboryZeZdroju();
+            }
+        }
+
 
         private void textBoxMaska_TextChanged(object sender, EventArgs e)
         {
@@ -462,9 +475,22 @@ namespace fotocopy
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
-                textBoxZdroj.Text = a.GetValue(0).ToString();
+                textBoxZdroj1.Text = a.GetValue(0).ToString();
             }
 
+        }
+        private void textBoxZdroj2_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void textBoxZdroj2_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
+                textBoxZdroj2.Text = a.GetValue(0).ToString();
+            }
         }
 
         private void textBoxCil1_DragDrop(object sender, DragEventArgs e)
