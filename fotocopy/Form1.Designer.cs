@@ -69,6 +69,7 @@
             this.textBoxZdroj2 = new System.Windows.Forms.TextBox();
             this.buttonVyberZdroje2 = new System.Windows.Forms.Button();
             this.buttonSmazRawy = new System.Windows.Forms.Button();
+            this.buttonNastaveni = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonVyberZdroje1
@@ -426,11 +427,23 @@
             this.buttonSmazRawy.UseVisualStyleBackColor = true;
             this.buttonSmazRawy.Click += new System.EventHandler(this.buttonSmazRawy_Click);
             // 
+            // buttonNastaveni
+            // 
+            this.buttonNastaveni.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonNastaveni.Location = new System.Drawing.Point(670, 13);
+            this.buttonNastaveni.Name = "buttonNastaveni";
+            this.buttonNastaveni.Size = new System.Drawing.Size(75, 23);
+            this.buttonNastaveni.TabIndex = 41;
+            this.buttonNastaveni.Text = "Nastavení";
+            this.buttonNastaveni.UseVisualStyleBackColor = true;
+            this.buttonNastaveni.Click += new System.EventHandler(this.buttonNastaveni_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 501);
+            this.Controls.Add(this.buttonNastaveni);
             this.Controls.Add(this.buttonSmazRawy);
             this.Controls.Add(this.buttonVyberZdroje2);
             this.Controls.Add(this.textBoxZdroj2);
@@ -519,6 +532,7 @@
         private System.Windows.Forms.TextBox textBoxZdroj2;
         private System.Windows.Forms.Button buttonVyberZdroje2;
         private System.Windows.Forms.Button buttonSmazRawy;
+        private System.Windows.Forms.Button buttonNastaveni;
     }
 }
 

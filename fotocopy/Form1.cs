@@ -15,14 +15,47 @@ namespace fotocopy
     public partial class Form1 : Form
     {
         static String stringRegistry = "Software\\carlosso\\photocopy";
-        static String[] typy = { "jpg", "cr2", "avi", "mov", "mp4","arw","mts" };
+        static List<String> typySouboruVse;
+        static List<String> typySouboruFotky;
+        static List<String> typySouboruRawy;
+        static List<String> typySouboruVideo;
         static Int32 konstSirkaSloupce = 40;
         public Form1(String vychoziAdresar)
         {
             InitializeComponent();
             /*----nacteni hodnot z registry---*/
             labelExt.Text = "";
-            /*---nejdriv musi byt maska, podle ni se nacitaji souboru--*/
+
+            /*---nejdriv musi byt maska, podle ni se nacitaji soubory--*/
+            Nastaveni.typySouboruFotek = nactiHodnotuZRegistry("EXTFOTO");
+            if (Nastaveni.typySouboruFotek == "")
+            {
+                Nastaveni.typySouboruFotek = "jpg";
+            }
+            Nastaveni.typySouboruRawy = nactiHodnotuZRegistry("EXTRAW");
+            if (Nastaveni.typySouboruRawy == "")
+            {
+                Nastaveni.typySouboruRawy = "cr2 arw";
+            }
+            Nastaveni.typySouboruVidea = nactiHodnotuZRegistry("EXTVIDEO");
+            if (Nastaveni.typySouboruVidea == "")
+            {
+                Nastaveni.typySouboruVidea = "avi mts mov mp4";
+            }
+            typySouboruVse = new List<String>();
+            typySouboruVse.AddRange(Nastaveni.typySouboruFotek.Split(' '));
+            typySouboruVse.AddRange(Nastaveni.typySouboruRawy.Split(' '));
+            typySouboruVse.AddRange(Nastaveni.typySouboruVidea.Split(' '));
+
+            typySouboruFotky = new List<String>();
+            typySouboruFotky.AddRange(Nastaveni.typySouboruFotek.Split(' '));
+
+            typySouboruRawy = new List<String>();
+            typySouboruRawy.AddRange(Nastaveni.typySouboruRawy.Split(' '));
+
+            typySouboruVideo = new List<String>();
+            typySouboruVideo.AddRange(Nastaveni.typySouboruVidea.Split(' '));
+
             textBoxMaska.Text = nactiHodnotuZRegistry("MASKA");
             textBoxZdroj1.Text = nactiHodnotuZRegistry("ZDROJ1");
             textBoxZdroj2.Text = nactiHodnotuZRegistry("ZDROJ2");
@@ -35,7 +68,7 @@ namespace fotocopy
                 textBoxMaska.Text = "yyyy_MM_dd";
             }
 
-            foreach (String typ in typy)
+            foreach (String typ in typySouboruVse)
             {
                 ColumnHeader sloupec = listViewSouboryZdrojove.Columns.Add(typ);
                 sloupec.Width = konstSirkaSloupce;
@@ -147,6 +180,11 @@ namespace fotocopy
             klic.SetValue("CIL2", textBoxCilRaw.Text);
             klic.SetValue("CIL3", textBoxCilVideo.Text);
             klic.SetValue("MASKA", textBoxMaska.Text);
+
+            klic.SetValue("EXTFOTO", Nastaveni.typySouboruFotek);
+            klic.SetValue("EXTRAW", Nastaveni.typySouboruRawy);
+            klic.SetValue("EXTVIDEO", Nastaveni.typySouboruVidea);
+
             klic.Close();
         }
         private String DejDatumSouboru(String soubor)
@@ -159,7 +197,7 @@ namespace fotocopy
         private void NactiVsechnySouboryZeZdroju()
         {
             /*----nacte vsechny druhy souboru ze zdrojoveho adresare---*/
-            foreach (String ext in typy)
+            foreach (String ext in typySouboruVse)
             {
                 NactiSouboruZeZdrojuJedneExtenze(ext);
             }
@@ -172,13 +210,13 @@ namespace fotocopy
             foreach (String soubor in soubory)
             {
                 /*---zjitim pozici extenze v poli, podle toho urcim sloupec v listView---*/
-                Int32 sloupec = Array.IndexOf<String>(typy, ext);
+                Int32 sloupec = typySouboruVse.FindIndex(pol=>pol.Equals(ext));
                 String datumZobraz = DejDatumSouboru(soubor);
                 ListViewItem polozka = listViewSouboryZdrojove.FindItemWithText(datumZobraz);
                 if (polozka == null)
                 {
                     polozka = listViewSouboryZdrojove.Items.Add(datumZobraz);
-                    foreach (String typ in typy)
+                    foreach (String typ in typySouboruVse)
                     {
                         polozka.SubItems.Add("");
                     }
@@ -199,7 +237,7 @@ namespace fotocopy
         private int VratPocetSouboruVeZdrojovychAdresarich()
         {
             int pocetSouboru = 0;
-            foreach (String ext in typy)
+            foreach (String ext in typySouboruVse)
             {
                 List<String> soubory = VratSouboryVeZdrojovychAdresarichJedneExtenze(ext);
                 pocetSouboru += soubory.Count;
@@ -209,7 +247,7 @@ namespace fotocopy
 
         private List<string> VratSouboryVeZdrojovychAdresarichJedneExtenze(string ext)
         {
-            String zdrojovyAdresar="";
+            String zdrojovyAdresar = "";
             List<String> soubory = new List<String>();
             /*----nacte soubory ze zdrojoveho adresare-------*/
             for (int i = 1; i <= 2; i++) //---dva zdrojove adresare
@@ -233,14 +271,14 @@ namespace fotocopy
                     MessageBox.Show("CHYBA: Chyba při hledání ve zdrojovém adresáři: " + zdrojovyAdresar);
                 }
             }
-            soubory=soubory.Distinct().ToList();
+            soubory = soubory.Distinct().ToList();
             return soubory;
         }
 
         private void NadKopiruj()
         {
             /*-----spusteni kopirovani----*/
-            if (textBoxCilJpg.Text == "" && textBoxCilRaw.Text == "" && textBoxCilVideo.Text=="")
+            if (textBoxCilJpg.Text == "" && textBoxCilRaw.Text == "" && textBoxCilVideo.Text == "")
             {
                 MessageBox.Show("CHYBA: Není zadán ani jeden z cílových adresářů.");
                 return;
@@ -249,7 +287,7 @@ namespace fotocopy
             try
             {
                 pocetZkopirovanych = 0;
-                foreach (String ext in typy)
+                foreach (String ext in typySouboruVse)
                 {
                     pocetZkopirovanych += Kopiruj(ext);
                 }
@@ -271,7 +309,7 @@ namespace fotocopy
         private Int32 Kopiruj(String ext)
         {
             /*------zkopiruje soubory dane extenze do cilovych adresaru---*/
-            Int32 pocetCelkem =0 ;
+            Int32 pocetCelkem = 0;
             Int32 pocitadlo = 0;
             labelExt.Text = "*." + ext;
             labelExt.Refresh();
@@ -286,23 +324,27 @@ namespace fotocopy
                 String cesta = Path.GetDirectoryName(soubor);
                 String datumString = DejDatumSouboru(soubor);
                 String mezi = "";
-                labelKopirovanySoubor.Text = "Probíhá kopírování souboru: " +soubor;
+                labelKopirovanySoubor.Text = "Probíhá kopírování souboru: " + soubor;
                 if (textBoxMeziadresar.Text.Trim() != "")
                 {
                     mezi = textBoxMeziadresar.Text.Trim() + @"\";
                 }
                 String cilovyAdresar;
-                switch (ext) {
-                    case "arw":
-                    case "cr2":
-                        cilovyAdresar = textBoxCilRaw.Text + @"\" + mezi + datumString;
-                        break;
-                    case "jpg":
+                if(typySouboruRawy.FindIndex(pol => pol.Equals(ext))>=0)
+                {
+                    cilovyAdresar = textBoxCilRaw.Text + @"\" + mezi + datumString;
+                }
+                else
+                {
+                    if (typySouboruFotky.FindIndex(pol => pol.Equals(ext)) >= 0)
+                    {
                         cilovyAdresar = textBoxCilJpg.Text + @"\" + mezi + datumString;
-                        break;
-                    default:
+                    }
+                    else
+                    {
+                        //---video---
                         cilovyAdresar = textBoxCilVideo.Text + @"\" + mezi + datumString;
-                        break;
+                    }
                 }
 
                 if (!Directory.Exists(cilovyAdresar))
@@ -322,9 +364,9 @@ namespace fotocopy
                     long win32ErrorCode = Marshal.GetHRForException(ex) & 0xFFFF;
                     if (win32ErrorCode == ERROR_HANDLE_DISK_FULL || win32ErrorCode == ERROR_DISK_FULL)
                     {
-                       MessageBox.Show("CHYBA: Nedostatek místa na disku.");
-                       throw ex;
-                       // Error is due to "out of disk space"
+                        MessageBox.Show("CHYBA: Nedostatek místa na disku.");
+                        throw ex;
+                        // Error is due to "out of disk space"
                     }
                 }
             }
@@ -367,7 +409,7 @@ namespace fotocopy
                 /*-----smazani zdrojovych souboru---*/
                 pocetNeuspesne = 0;
                 pocetUspesne = 0;
-                foreach (String ext in typy)
+                foreach (String ext in typySouboruVse)
                 {
                     Smaz(ext, ref pocetUspesne, ref pocetNeuspesne, ref pocitadlo);
                     pocetUspesneCelkem += pocetUspesne;
@@ -607,6 +649,12 @@ namespace fotocopy
                 }
             }
 
+        }
+
+        private void buttonNastaveni_Click(object sender, EventArgs e)
+        {
+            FormNastaveni formNastaveni = new FormNastaveni();
+            formNastaveni.ShowDialog();
         }
     }
 }
