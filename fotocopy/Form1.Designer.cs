@@ -68,6 +68,7 @@
             this.backgroundWorkerDelete = new System.ComponentModel.BackgroundWorker();
             this.textBoxZdroj2 = new System.Windows.Forms.TextBox();
             this.buttonVyberZdroje2 = new System.Windows.Forms.Button();
+            this.buttonSmazRawy = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonVyberZdroje1
@@ -415,11 +416,22 @@
             this.buttonVyberZdroje2.UseVisualStyleBackColor = true;
             this.buttonVyberZdroje2.Click += new System.EventHandler(this.buttonVyberZdroje2_Click);
             // 
+            // buttonSmazRawy
+            // 
+            this.buttonSmazRawy.Location = new System.Drawing.Point(326, 401);
+            this.buttonSmazRawy.Name = "buttonSmazRawy";
+            this.buttonSmazRawy.Size = new System.Drawing.Size(110, 23);
+            this.buttonSmazRawy.TabIndex = 40;
+            this.buttonSmazRawy.Text = "Smaž rawy bez jpg";
+            this.buttonSmazRawy.UseVisualStyleBackColor = true;
+            this.buttonSmazRawy.Click += new System.EventHandler(this.buttonSmazRawy_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 501);
+            this.Controls.Add(this.buttonSmazRawy);
             this.Controls.Add(this.buttonVyberZdroje2);
             this.Controls.Add(this.textBoxZdroj2);
             this.Controls.Add(this.labelKopirovanySoubor);
@@ -506,6 +518,7 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerDelete;
         private System.Windows.Forms.TextBox textBoxZdroj2;
         private System.Windows.Forms.Button buttonVyberZdroje2;
+        private System.Windows.Forms.Button buttonSmazRawy;
     }
 }
 

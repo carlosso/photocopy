@@ -556,5 +556,57 @@ namespace fotocopy
 
         }
 
+        private void buttonSmazRawy_Click(object sender, EventArgs e)
+        {
+            /*----smaze na PC rawy, ktere nemaji odpovidajici *.jpg soubor
+ * tyka se to souboru na cilovych cestach---*/
+            /*----vyber adresare, kde jsou na PC rawy --*/
+            DialogResult result;
+            /*---kontrola, zda je adresar zadan---*/
+            if (textBoxCilRaw.Text == "")
+            {
+                MessageBox.Show("CHYBA: Základní adresář, kde se mají hledat rawy není zadán.");
+                return;
+            }
+            if (textBoxCilJpg.Text == "")
+            {
+                MessageBox.Show("CHYBA: Základní adresář, kde se mají hledat *.jpg není zadán.");
+                return;
+            }
+            /*
+            if (textBoxKonec.Text == "")
+            {
+                MessageBox.Show("CHYBA: Podadresář, kde se mají mazat rawy není zadán.");
+                return;
+            }
+            */
+
+            /*---kontrola, zda je adresar existuje---*/
+
+            Int32 budeSmazano = DelRaw.ProjdiSmaz(textBoxCilRaw.Text, false, textBoxCilRaw.Text, textBoxCilJpg.Text);
+            if (budeSmazano > 0)
+            {
+
+                result = MessageBox.Show("Počet souborů, který bude smazán: " + budeSmazano.ToString() + ". Pokračovat?", "Dotaz", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Int32 byloSmazano = DelRaw.ProjdiSmaz(textBoxCilRaw.Text, true, textBoxCilRaw.Text, textBoxCilJpg.Text);
+                    MessageBox.Show("Počet souborů, který byl smazán: " + byloSmazano.ToString() + ".");
+
+                }
+            }
+            else
+            {
+                if (budeSmazano == 0)
+                {
+                    MessageBox.Show("Nebyly nalezeny žádné soubory ke smazání.");
+                }
+                else
+                {
+                    MessageBox.Show("CHYBA při čtení z adresáře pro rawy.");
+                }
+            }
+
+        }
     }
 }
