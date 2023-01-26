@@ -10,29 +10,37 @@ namespace fotocopy
 {
     class DelRaw
     {
-        private static String PremenCestuKRawuNaCestuKJpg(String celaCestaKSouboruCr2, String horniCastyCestyKRaw, String horniCastCestyKJgp)
+        private static String PremenCestuKRawuNaCestuKJpg(String celaCestaKRawSouboru, String horniCastyCestyKRaw, String horniCastCestyKJgp)
         {
             /*---vrati jmeno (s cestou) odpovidajiciho jpg souboru--*/
             /*---musim odriznout horni cast cesty k rawu a nahradit ji horni casti cesty k jpg---*/
             String celaCestaKSouboruJpg = "";
-            celaCestaKSouboruJpg = celaCestaKSouboruCr2.Replace(horniCastyCestyKRaw, horniCastCestyKJgp);
+            celaCestaKSouboruJpg = celaCestaKRawSouboru.Replace(horniCastyCestyKRaw, horniCastCestyKJgp);
             celaCestaKSouboruJpg = celaCestaKSouboruJpg.Substring(0, celaCestaKSouboruJpg.Length - 3);
             celaCestaKSouboruJpg += "jpg";
             return celaCestaKSouboruJpg;
         }
 
-        public static Int32 ProjdiSmaz(String kdeMazat, Boolean mazat, String horniCastyCestyKRaw, String horniCastCestyKJgp)
+        public static Int32 ProjdiSmaz(String kdeMazat, Boolean mazat, String horniCastyCestyKRaw, String horniCastCestyKJgp, String rawyMaska)
         {
             Int32 pocetSmazat = 0;
             List<string> soubory;
             List<string> souboryJednaPripona;
             soubory = new List<string>();
+            string[] masky = new string[2];
+            masky[0] = rawyMaska;
             try
             {
-                souboryJednaPripona = vratVyhledejAVratSouboryRekurzivne(kdeMazat, "*.cr2");
-                soubory.AddRange(souboryJednaPripona);
-                souboryJednaPripona = vratVyhledejAVratSouboryRekurzivne(kdeMazat, "*.arw");
-                soubory.AddRange(souboryJednaPripona);
+                List<String> typySouboruRawy;
+                typySouboruRawy = new List<String>();
+                typySouboruRawy.AddRange(Nastaveni.typySouboruRawy.Split(' '));
+
+                foreach(string typSouboruRaw in typySouboruRawy)
+                {
+                    masky[1] = "*."+typSouboruRaw;
+                    souboryJednaPripona = vratVyhledejAVratSouboryRekurzivne(kdeMazat, masky);
+                    soubory.AddRange(souboryJednaPripona);
+                }
             }
             catch (Exception)
             {
@@ -58,7 +66,7 @@ namespace fotocopy
             return pocetSmazat;
         }
 
-        private static List<String> vratVyhledejAVratSouboryRekurzivne(String kdeHledat, String maska)
+        private static List<String> vratVyhledejAVratSouboryRekurzivne(String kdeHledat, String[] maska)
         {
 
             List<KomponentaFileSystemu> seznamKomponent = new List<KomponentaFileSystemu>();

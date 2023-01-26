@@ -17,20 +17,18 @@ namespace photocopy
             this.jeAdresar = true;
         }
 
-	public void prohledejAPridej(List<KomponentaFileSystemu> seznamKomponent, string maska) {
+	public void prohledejAPridej(List<KomponentaFileSystemu> seznamKomponent, string[] maska) {
 		string [] soubory;
 		string [] adresare;
 
-		soubory = Directory.GetFiles(this.getNazev(),maska);
-
+		soubory = Directory.GetFiles(this.getNazev(), maska[1]);
 		foreach(string nazevSouboru in soubory)
 		{
             Soubor soubor = new Soubor(nazevSouboru);
             soubor.prohledejAPridej(seznamKomponent,maska);
 		}
 
-        adresare = Directory.GetDirectories(this.getNazev());
-
+        adresare = Directory.GetDirectories(this.getNazev(), maska[0]+"*");
         foreach (string nazevAdresare in adresare)
         {
             KompozitAdresar adresar = new KompozitAdresar(nazevAdresare);

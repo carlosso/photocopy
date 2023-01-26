@@ -15,7 +15,7 @@ namespace photocopy
             this.jeAdresar = false;
         }
 
-        public void prohledejAPridej(List<KomponentaFileSystemu> seznamKomponent, string maska)
+        public void prohledejAPridej(List<KomponentaFileSystemu> seznamKomponent, string[] maska)
         {
             seznamKomponent.Add(this);
         }

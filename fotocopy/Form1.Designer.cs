@@ -70,6 +70,8 @@
             this.buttonVyberZdroje2 = new System.Windows.Forms.Button();
             this.buttonSmazRawy = new System.Windows.Forms.Button();
             this.buttonNastaveni = new System.Windows.Forms.Button();
+            this.textBoxRawyMaska = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonVyberZdroje1
@@ -419,7 +421,7 @@
             // 
             // buttonSmazRawy
             // 
-            this.buttonSmazRawy.Location = new System.Drawing.Point(326, 401);
+            this.buttonSmazRawy.Location = new System.Drawing.Point(511, 372);
             this.buttonSmazRawy.Name = "buttonSmazRawy";
             this.buttonSmazRawy.Size = new System.Drawing.Size(110, 23);
             this.buttonSmazRawy.TabIndex = 40;
@@ -438,11 +440,29 @@
             this.buttonNastaveni.UseVisualStyleBackColor = true;
             this.buttonNastaveni.Click += new System.EventHandler(this.buttonNastaveni_Click);
             // 
+            // textBoxRawyMaska
+            // 
+            this.textBoxRawyMaska.Location = new System.Drawing.Point(436, 421);
+            this.textBoxRawyMaska.Name = "textBoxRawyMaska";
+            this.textBoxRawyMaska.Size = new System.Drawing.Size(250, 20);
+            this.textBoxRawyMaska.TabIndex = 42;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(501, 401);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(147, 13);
+            this.label16.TabIndex = 43;
+            this.label16.Text = "maska pro rawy (bez extenze)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 501);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBoxRawyMaska);
             this.Controls.Add(this.buttonNastaveni);
             this.Controls.Add(this.buttonSmazRawy);
             this.Controls.Add(this.buttonVyberZdroje2);
@@ -533,6 +553,8 @@
         private System.Windows.Forms.Button buttonVyberZdroje2;
         private System.Windows.Forms.Button buttonSmazRawy;
         private System.Windows.Forms.Button buttonNastaveni;
+        private System.Windows.Forms.TextBox textBoxRawyMaska;
+        private System.Windows.Forms.Label label16;
     }
 }
 

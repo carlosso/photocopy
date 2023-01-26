@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -62,6 +63,7 @@ namespace fotocopy
             textBoxCilJpg.Text = nactiHodnotuZRegistry("CIL1");
             textBoxCilRaw.Text = nactiHodnotuZRegistry("CIL2");
             textBoxCilVideo.Text = nactiHodnotuZRegistry("CIL3");
+            textBoxRawyMaska.Text = nactiHodnotuZRegistry("RAWMASKA");
 
             if (textBoxMaska.Text == "")
             {
@@ -180,6 +182,7 @@ namespace fotocopy
             klic.SetValue("CIL2", textBoxCilRaw.Text);
             klic.SetValue("CIL3", textBoxCilVideo.Text);
             klic.SetValue("MASKA", textBoxMaska.Text);
+            klic.SetValue("RAWMASKA", textBoxRawyMaska.Text);
 
             klic.SetValue("EXTFOTO", Nastaveni.typySouboruFotek);
             klic.SetValue("EXTRAW", Nastaveni.typySouboruRawy);
@@ -323,6 +326,7 @@ namespace fotocopy
                 String zdrojovySoubor = soubor;
                 String cesta = Path.GetDirectoryName(soubor);
                 String datumString = DejDatumSouboru(soubor);
+                String rok = datumString.Substring(0, 4);
                 String mezi = "";
                 labelKopirovanySoubor.Text = "Probíhá kopírování souboru: " + soubor;
                 if (textBoxMeziadresar.Text.Trim() != "")
@@ -330,22 +334,26 @@ namespace fotocopy
                     mezi = textBoxMeziadresar.Text.Trim() + @"\";
                 }
                 String cilovyAdresar;
+                String cilovyAdresarZaklad;
                 if(typySouboruRawy.FindIndex(pol => pol.Equals(ext))>=0)
                 {
-                    cilovyAdresar = textBoxCilRaw.Text + @"\" + mezi + datumString;
+                    //-----raw----
+                    cilovyAdresarZaklad = textBoxCilRaw.Text;
                 }
                 else
                 {
                     if (typySouboruFotky.FindIndex(pol => pol.Equals(ext)) >= 0)
                     {
-                        cilovyAdresar = textBoxCilJpg.Text + @"\" + mezi + datumString;
+                        //----jpg-----
+                        cilovyAdresarZaklad = textBoxCilJpg.Text;
                     }
                     else
                     {
                         //---video---
-                        cilovyAdresar = textBoxCilVideo.Text + @"\" + mezi + datumString;
+                        cilovyAdresarZaklad = textBoxCilVideo.Text;
                     }
                 }
+                cilovyAdresar= cilovyAdresarZaklad +@"\" + rok + @"\" + mezi + datumString;
 
                 if (!Directory.Exists(cilovyAdresar))
                 {
@@ -625,14 +633,14 @@ namespace fotocopy
 
             /*---kontrola, zda je adresar existuje---*/
 
-            Int32 budeSmazano = DelRaw.ProjdiSmaz(textBoxCilRaw.Text, false, textBoxCilRaw.Text, textBoxCilJpg.Text);
+            Int32 budeSmazano = DelRaw.ProjdiSmaz(textBoxCilRaw.Text, false, textBoxCilRaw.Text, textBoxCilJpg.Text, textBoxRawyMaska.Text);
             if (budeSmazano > 0)
             {
 
                 result = MessageBox.Show("Počet souborů, který bude smazán: " + budeSmazano.ToString() + ". Pokračovat?", "Dotaz", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
-                    Int32 byloSmazano = DelRaw.ProjdiSmaz(textBoxCilRaw.Text, true, textBoxCilRaw.Text, textBoxCilJpg.Text);
+                    Int32 byloSmazano = DelRaw.ProjdiSmaz(textBoxCilRaw.Text, true, textBoxCilRaw.Text, textBoxCilJpg.Text, textBoxRawyMaska.Text);
                     MessageBox.Show("Počet souborů, který byl smazán: " + byloSmazano.ToString() + ".");
 
                 }
