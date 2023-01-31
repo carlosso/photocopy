@@ -76,6 +76,7 @@
             this.buttonVyberZdroje2 = new System.Windows.Forms.Button();
             this.textBoxZdroj3 = new System.Windows.Forms.TextBox();
             this.buttonVyberZdroje3 = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonVyberZdroje0
@@ -147,6 +148,7 @@
             this.listViewSouboryZdrojove.TabIndex = 25;
             this.listViewSouboryZdrojove.UseCompatibleStateImageBehavior = false;
             this.listViewSouboryZdrojove.View = System.Windows.Forms.View.Details;
+            this.listViewSouboryZdrojove.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewSouboryZdrojove_MouseDoubleClick);
             // 
             // columnHeader1
             // 
@@ -203,7 +205,7 @@
             // 
             // textBoxMeziadresar
             // 
-            this.textBoxMeziadresar.Location = new System.Drawing.Point(362, 248);
+            this.textBoxMeziadresar.Location = new System.Drawing.Point(362, 230);
             this.textBoxMeziadresar.Name = "textBoxMeziadresar";
             this.textBoxMeziadresar.Size = new System.Drawing.Size(171, 20);
             this.textBoxMeziadresar.TabIndex = 17;
@@ -220,7 +222,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(359, 232);
+            this.label4.Location = new System.Drawing.Point(359, 214);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(151, 13);
             this.label4.TabIndex = 15;
@@ -229,7 +231,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(345, 251);
+            this.label5.Location = new System.Drawing.Point(345, 233);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(12, 13);
             this.label5.TabIndex = 16;
@@ -238,7 +240,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(539, 251);
+            this.label6.Location = new System.Drawing.Point(539, 233);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(12, 13);
             this.label6.TabIndex = 17;
@@ -247,7 +249,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(670, 251);
+            this.label10.Location = new System.Drawing.Point(670, 233);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(12, 13);
             this.label10.TabIndex = 21;
@@ -293,7 +295,7 @@
             // 
             // textBoxMaska
             // 
-            this.textBoxMaska.Location = new System.Drawing.Point(569, 251);
+            this.textBoxMaska.Location = new System.Drawing.Point(569, 233);
             this.textBoxMaska.Name = "textBoxMaska";
             this.textBoxMaska.Size = new System.Drawing.Size(82, 20);
             this.textBoxMaska.TabIndex = 18;
@@ -302,7 +304,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(566, 232);
+            this.label8.Location = new System.Drawing.Point(566, 214);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(99, 13);
             this.label8.TabIndex = 27;
@@ -311,7 +313,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(570, 274);
+            this.label7.Location = new System.Drawing.Point(570, 256);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(36, 13);
             this.label7.TabIndex = 28;
@@ -320,7 +322,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(567, 288);
+            this.label9.Location = new System.Drawing.Point(567, 270);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(54, 13);
             this.label9.TabIndex = 29;
@@ -329,7 +331,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(569, 303);
+            this.label13.Location = new System.Drawing.Point(569, 285);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(40, 13);
             this.label13.TabIndex = 30;
@@ -338,7 +340,7 @@
             // labelPriklad
             // 
             this.labelPriklad.AutoSize = true;
-            this.labelPriklad.Location = new System.Drawing.Point(607, 325);
+            this.labelPriklad.Location = new System.Drawing.Point(607, 307);
             this.labelPriklad.Name = "labelPriklad";
             this.labelPriklad.Size = new System.Drawing.Size(41, 13);
             this.labelPriklad.TabIndex = 31;
@@ -347,7 +349,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(569, 325);
+            this.label15.Location = new System.Drawing.Point(569, 307);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(32, 13);
             this.label15.TabIndex = 32;
@@ -486,11 +488,21 @@
             this.buttonVyberZdroje3.Text = "...";
             this.buttonVyberZdroje3.UseVisualStyleBackColor = true;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(359, 256);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(159, 13);
+            this.label17.TabIndex = 44;
+            this.label17.Text = "Doubleklik na datumu - předplní";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 501);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.buttonVyberZdroje3);
             this.Controls.Add(this.textBoxZdroj3);
             this.Controls.Add(this.buttonVyberZdroje2);
@@ -593,6 +605,7 @@
         private System.Windows.Forms.Button buttonVyberZdroje2;
         private System.Windows.Forms.TextBox textBoxZdroj3;
         private System.Windows.Forms.Button buttonVyberZdroje3;
+        private System.Windows.Forms.Label label17;
     }
 }
 

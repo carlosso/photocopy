@@ -693,5 +693,15 @@ namespace fotocopy
             FormNastaveni formNastaveni = new FormNastaveni();
             formNastaveni.ShowDialog();
         }
+
+        private void listViewSouboryZdrojove_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewItem polozka=listViewSouboryZdrojove.SelectedItems[0];
+            if (polozka != null)
+            {
+                textBoxMeziadresar.Text= polozka.Text;
+            }
+
+        }
     }
 }
