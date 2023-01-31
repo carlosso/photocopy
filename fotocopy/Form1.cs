@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace fotocopy
 {
@@ -58,8 +59,6 @@ namespace fotocopy
             typySouboruVideo.AddRange(Nastaveni.typySouboruVidea.Split(' '));
 
             textBoxMaska.Text = nactiHodnotuZRegistry("MASKA");
-            textBoxZdroj1.Text = nactiHodnotuZRegistry("ZDROJ1");
-            textBoxZdroj2.Text = nactiHodnotuZRegistry("ZDROJ2");
             textBoxCilJpg.Text = nactiHodnotuZRegistry("CIL1");
             textBoxCilRaw.Text = nactiHodnotuZRegistry("CIL2");
             textBoxCilVideo.Text = nactiHodnotuZRegistry("CIL3");
@@ -75,7 +74,64 @@ namespace fotocopy
                 ColumnHeader sloupec = listViewSouboryZdrojove.Columns.Add(typ);
                 sloupec.Width = konstSirkaSloupce;
             }
+            nastavControlyProZdroje();
+            NactiVsechnySouboryZeZdroju();
         }
+        private void nastavControlyProZdroje()
+        {
+            List<TextBox> zdrojeTB = vratTextBoxyZdroje();
+            foreach(TextBox zdrojTB in zdrojeTB)
+            {
+                int index = zdrojeTB.IndexOf(zdrojTB);
+                String klic = "ZDROJ" + index.ToString();
+                zdrojTB.Text= nactiHodnotuZRegistry(klic);
+                zdrojTB.TextChanged += textBoxZdrojTextZmenen;
+                zdrojTB.DragEnter += textBoxZdrojVse_DragEnter;
+                zdrojTB.DragDrop += textBoxZdrojVse_DragDrop;
+            }
+            List<Button> zdrojeButtony = vratButtonyZdroje();
+            foreach(Button zdrojButton in zdrojeButtony)
+            {
+                zdrojButton.Click+= vyberZdroj;
+            }
+        }
+
+        private void ulozHodnotyProZdroje()
+        {
+            List<TextBox> zdrojeTB = vratTextBoxyZdroje();
+            foreach (TextBox zdrojTB in zdrojeTB)
+            {
+                int index = zdrojeTB.IndexOf(zdrojTB);
+                String klic = "ZDROJ" + index.ToString();
+                ulozHodnotuDoRegistry(klic,zdrojTB.Text);
+            }
+        }
+
+        List<TextBox> vratTextBoxyZdroje()
+        {
+            List<TextBox> textBoxyZdroje = new List<TextBox>();
+            for(int i=0;i<9;i++)
+            {
+               String nazevControlu = "textBoxZdroj" + i.ToString();
+               TextBox txtBox = this.Controls.Find(nazevControlu,true).FirstOrDefault() as TextBox;
+               if (txtBox == null) break;
+               textBoxyZdroje.Add(txtBox);
+            }
+            return textBoxyZdroje;
+        }
+        List<Button> vratButtonyZdroje()
+        {
+            List<Button> buttonyZdroje = new List<Button>();
+            for (int i = 0; i < 9; i++)
+            {
+                String nazevControlu = "buttonVyberZdroje" + i.ToString();
+                Button button = this.Controls.Find(nazevControlu, true).FirstOrDefault() as Button;
+                if (button == null) break;
+                buttonyZdroje.Add(button);
+            }
+            return buttonyZdroje;
+        }
+
 
         private String nactiHodnotuZRegistry(String nazevHodnoty)
         {
@@ -93,31 +149,28 @@ namespace fotocopy
             return hodnota;
         }
 
-
-        private void buttonVyberZdroje1_Click(object sender, EventArgs e)
+        private void ulozHodnotuDoRegistry(String nazevHodnoty,String hodnota)
         {
-            /*----vyber zdrojoveho adresare1--*/
-            if (textBoxZdroj1.Text != "")
-            {
-                folderBrowserDialog1.SelectedPath = textBoxZdroj1.Text;
-            }
-            DialogResult result = folderBrowserDialog1.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                textBoxZdroj1.Text = folderBrowserDialog1.SelectedPath;
-            }
+            RegistryKey klic = Registry.CurrentUser.CreateSubKey(stringRegistry);
+            klic.SetValue(nazevHodnoty, hodnota);
+            klic.Close();
         }
-        private void buttonVyberZdroje2_Click(object sender, EventArgs e)
+
+        private void vyberZdroj(object sender, EventArgs e)
         {
+            String volajiciButton = ((Button)sender).Name;
+            String index = volajiciButton.Substring(volajiciButton.Length - 1, 1);
+            Control[] control = this.Controls.Find("textBoxZdroj"+index,true);
+            TextBox textBoxSCestou = (TextBox)control[0];
             /*----vyber zdrojoveho adresare1--*/
-            if (textBoxZdroj2.Text != "")
+            if (textBoxSCestou.Text != "")
             {
-                folderBrowserDialog1.SelectedPath = textBoxZdroj1.Text;
+                folderBrowserDialog1.SelectedPath = textBoxSCestou.Text;
             }
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                textBoxZdroj2.Text = folderBrowserDialog1.SelectedPath;
+                textBoxSCestou.Text = folderBrowserDialog1.SelectedPath;
             }
         }
 
@@ -175,20 +228,15 @@ namespace fotocopy
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             /*----ulozeni hodnot do registry---*/
-            RegistryKey klic = Registry.CurrentUser.CreateSubKey(stringRegistry);
-            klic.SetValue("ZDROJ1", textBoxZdroj1.Text);
-            klic.SetValue("ZDROJ2", textBoxZdroj2.Text);
-            klic.SetValue("CIL1", textBoxCilJpg.Text);
-            klic.SetValue("CIL2", textBoxCilRaw.Text);
-            klic.SetValue("CIL3", textBoxCilVideo.Text);
-            klic.SetValue("MASKA", textBoxMaska.Text);
-            klic.SetValue("RAWMASKA", textBoxRawyMaska.Text);
-
-            klic.SetValue("EXTFOTO", Nastaveni.typySouboruFotek);
-            klic.SetValue("EXTRAW", Nastaveni.typySouboruRawy);
-            klic.SetValue("EXTVIDEO", Nastaveni.typySouboruVidea);
-
-            klic.Close();
+            ulozHodnotyProZdroje();
+            ulozHodnotuDoRegistry("CIL1", textBoxCilJpg.Text);
+            ulozHodnotuDoRegistry("CIL2", textBoxCilRaw.Text);
+            ulozHodnotuDoRegistry("CIL3", textBoxCilVideo.Text);
+            ulozHodnotuDoRegistry("MASKA", textBoxMaska.Text);
+            ulozHodnotuDoRegistry("RAWMASKA", textBoxRawyMaska.Text);
+            ulozHodnotuDoRegistry("EXTFOTO", Nastaveni.typySouboruFotek);
+            ulozHodnotuDoRegistry("EXTRAW", Nastaveni.typySouboruRawy);
+            ulozHodnotuDoRegistry("EXTVIDEO", Nastaveni.typySouboruVidea);
         }
         private String DejDatumSouboru(String soubor)
         {
@@ -252,16 +300,15 @@ namespace fotocopy
         {
             String zdrojovyAdresar = "";
             List<String> soubory = new List<String>();
-            /*----nacte soubory ze zdrojoveho adresare-------*/
-            for (int i = 1; i <= 2; i++) //---dva zdrojove adresare
+            /*----nacte soubory ze zdrojovych adresaru-------*/
+            List<TextBox> zdrojeTB = vratTextBoxyZdroje();
+            foreach (TextBox zdrojTB in zdrojeTB)
             {
                 try
                 {
-                    String jmenoTextBoxu = "textBoxZdroj" + i;
-                    TextBox textBoxZdroj = (TextBox)this.Controls.Find(jmenoTextBoxu, true)[0];
-                    if (textBoxZdroj.Text.Trim() != "")
+                    if (zdrojTB.Text.Trim() != "")
                     {
-                        zdrojovyAdresar = textBoxZdroj.Text;
+                        zdrojovyAdresar = zdrojTB.Text;
                         if (Directory.Exists(zdrojovyAdresar))
                         {
                             String[] soubory1 = Directory.GetFiles(zdrojovyAdresar, "*." + ext, SearchOption.AllDirectories);
@@ -273,6 +320,7 @@ namespace fotocopy
                 {
                     MessageBox.Show("CHYBA: Chyba při hledání ve zdrojovém adresáři: " + zdrojovyAdresar);
                 }
+
             }
             soubory = soubory.Distinct().ToList();
             return soubory;
@@ -446,27 +494,32 @@ namespace fotocopy
         {
             String[] soubory;
             /*-----spusteni smazani zdrojovych souboru---*/
-            try
-            {
-                soubory = Directory.GetFiles(textBoxZdroj1.Text, "*." + ext, SearchOption.AllDirectories);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                return;
-            }
-            foreach (String soubor in soubory)
+            /*----nacte soubory ze zdrojovych adresaru-------*/
+            List<TextBox> zdrojeTB = vratTextBoxyZdroje();
+            foreach (TextBox zdrojTB in zdrojeTB)
             {
                 try
                 {
-                    File.Delete(soubor);
-                    pocitadlo++;
-                    progressBar1.Value = pocitadlo;
+                    soubory = Directory.GetFiles(zdrojTB.Text, "*." + ext, SearchOption.AllDirectories);
                 }
-                catch (Exception)
+                catch (DirectoryNotFoundException)
                 {
-                    pocetNeuspesne++;
+                    return;
                 }
-                pocetUspesne++;
+                foreach (String soubor in soubory)
+                {
+                    try
+                    {
+                        File.Delete(soubor);
+                        pocitadlo++;
+                        progressBar1.Value = pocitadlo;
+                    }
+                    catch (Exception)
+                    {
+                        pocetNeuspesne++;
+                    }
+                    pocetUspesne++;
+                }
             }
             return;
         }
@@ -479,22 +532,10 @@ namespace fotocopy
             }
         }
 
-        private void textBoxZdroj_TextChanged(object sender, EventArgs e)
+        private void textBoxZdrojTextZmenen(object sender, EventArgs e)
         {
-            if (textBoxZdroj1.Text != "")
-            {
-                listViewSouboryZdrojove.Items.Clear();
-                NactiVsechnySouboryZeZdroju();
-            }
-        }
-
-        private void textBoxZdroj2_TextChanged(object sender, EventArgs e)
-        {
-            if (textBoxZdroj2.Text != "")
-            {
-                listViewSouboryZdrojove.Items.Clear();
-                NactiVsechnySouboryZeZdroju();
-            }
+            listViewSouboryZdrojove.Items.Clear();
+            NactiVsechnySouboryZeZdroju();
         }
 
 
@@ -515,34 +556,6 @@ namespace fotocopy
             }
         }
 
-        private void textBoxZdroj_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Copy;
-        }
-
-        private void textBoxZdroj_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
-                textBoxZdroj1.Text = a.GetValue(0).ToString();
-            }
-
-        }
-        private void textBoxZdroj2_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Copy;
-        }
-
-        private void textBoxZdroj2_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
-                textBoxZdroj2.Text = a.GetValue(0).ToString();
-            }
-        }
-
         private void textBoxCil1_DragDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -556,7 +569,23 @@ namespace fotocopy
         private void textBoxCil1_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Copy;
+        }
 
+
+        private void textBoxZdrojVse_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+
+        }
+
+        private void textBoxZdrojVse_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                TextBox textBoxZdroj=(TextBox)sender;
+                Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
+                textBoxZdroj.Text = a.GetValue(0).ToString();
+            }
         }
 
         private void textBoxCil2_DragDrop(object sender, DragEventArgs e)
